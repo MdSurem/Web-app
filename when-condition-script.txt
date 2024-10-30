@@ -1,0 +1,67 @@
+pipeline {
+    agent any
+
+    stages {
+        stage("Checkout") {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage("Build") {
+            steps {
+                echo "Building the application..."
+                // Add build commands here
+            }
+        }
+
+        stage("Test") {
+            steps {
+                echo "Running tests..."
+                // Add test commands here
+            }
+        }
+
+        stage("Deploy to Staging") {
+            when {
+                branch 'develop'
+            }
+            steps {
+                echo "Deploying to Staging..."
+                // Add deployment commands here
+            }
+        }
+
+        stage("Deploy to Production") {
+            when {
+                branch 'master'
+            }
+            steps {
+                echo "Deploying to Production..."
+                // Add production deployment commands here
+            }
+        }
+
+        stage("Cleanup") {
+            steps {
+                echo "Cleaning up..."
+                // Add cleanup commands here
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "Pipeline completed successfully!"
+            // Notify success (e.g., send email or trigger another job)
+        }
+        failure {
+            echo "Pipeline failed!"
+            // Notify failure (e.g., send email or trigger another job)
+        }
+        always {
+            echo "This will always run regardless of the pipeline outcome."
+            // Perform any necessary cleanup or notifications
+        }
+    }
+}
