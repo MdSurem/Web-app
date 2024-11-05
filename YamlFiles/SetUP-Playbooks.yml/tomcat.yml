@@ -1,0 +1,19 @@
+---
+
+  - hosts: dev
+    connection: ssh
+      
+    tasks:
+      - name: install java 1.8 version
+        yum:
+          name: java-1.8.0-openjdk
+          state: present
+            
+            
+     - name: download tomcat file
+       get_url:
+         url:  https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.96/bin/apache-tomcat-9.0.96.tar.gz
+         dest: "/root"
+
+     - name: untar the file
+       command: untar -zxvf apache-tomcat-9.0.96.tar.gz
