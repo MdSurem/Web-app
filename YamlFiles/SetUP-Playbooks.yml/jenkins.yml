@@ -1,0 +1,26 @@
+---
+
+ - hosts: dev
+   connection: ssh
+
+   tasks:
+   - name: install java-17 version
+     yum:
+       name: java-17-amazon-corretto
+       state: present
+    
+   - name: download the path from jenkins.io
+     shell: sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
+
+   - name: download the key path
+     shell: sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+
+   - name: install jenkins
+     yum:
+       name: jenkins
+       state: present
+
+   - name: start the jenkins
+     service:
+        name: jenkins
+        state: started     
