@@ -1,19 +1,32 @@
 ---
 
-  - hosts: dev
-    connection: ssh
-      
-    tasks:
-      - name: install java 1.8 version
-        yum:
-          name: java-1.8.0-openjdk
-          state: present
-            
-            
-     - name: download tomcat file
+
+ - hosts: test
+   connection: ssh
+
+   tasks:
+     - name: install java 1.8 version
+       yum:
+         name: java-1.8.0-openjdk
+         state: present
+
+     - name: download the file from tomcat website called as dlcdn.
        get_url:
-         url:  https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.96/bin/apache-tomcat-9.0.96.tar.gz
+         url: https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.96/bin/apache-tomcat-9.0.96.tar.gz
          dest: "/root"
 
      - name: untar the file
-       command: untar -zxvf apache-tomcat-9.0.96.tar.gz
+       command: tar -zxvf apache-tomcat-9.0.96.tar.gz
+
+     - name: allow permissions
+       copy:
+         src: "/root/context.xml"
+         dest: "/root/apache-tomcat-9.0.96/webapps/manager/META-INF/context.xml"
+
+     - name: set credentials
+       copy:
+         src: "/root/tomcat-users.xml"
+         dest: "/root/apache-tomcat-9.0.96/conf/tomcat-users.xml"
+
+     - name: start the tomcat
+       shell: nohup "/root/apache-tomcat-9.0.96/bin/startup.sh"
