@@ -1,0 +1,25 @@
+      yum install docker -y
+    
+    4  docker version
+    5  systemctl start docker
+    6  systemctl status docker
+  
+    8  docker pull shaikmustafa/cycle
+    9  docker images
+   10  docker run -d --name surem -p 123:80 shaikmustafa/cycle
+   11  docker ps
+        
+   12  docker pull shaikmustafa/mygame
+   13  docker images
+   14  docker run -d --name mygame -p 1234:80 shaikmustafa/mygame
+   15  docker ps
+
+   17  docker pull sonarqube:lts-community
+   18  docker images
+   19  docker run -d --name sonar -p 4592:9000 sonarqube:lts-community
+   20  docker ps
+     
+   21  docker pull jenkins/jenkins
+   22  docker images
+   23  docker run -d --name jenkins -p 8787:8080 jenkins/jenkins:latest
+       docker ps
