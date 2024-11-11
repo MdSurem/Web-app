@@ -1,0 +1,18 @@
+---
+
+ - hosts: dev
+   connection: ssh
+
+   tasks:
+     - name: installing webserver
+       yum:
+         name: httpd
+         state: present
+       notify: tages
+
+   handlers:
+     - name: tages
+       service:
+         name: httpd
+         state: started
+...
