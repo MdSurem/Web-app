@@ -1,0 +1,13 @@
+
+---
+
+ - hosts: dev
+   connection: ssh
+
+
+   tasks:
+     - name: copying the file
+       copy:
+         src: "test.sh"
+         dest: "devops"
+...
