@@ -1,0 +1,24 @@
+---
+
+
+    - hosts: dev
+      connection: ssh
+
+      tasks:
+        - name: create users
+          user:
+            name: "{{item}}"
+            state: present
+          with_items:
+              - surem
+              - lokesh
+              - shamoon
+
+        - name: create groups
+          group:
+            name: "{{item}}"
+            state: present
+          with_items:
+              - alvin
+              - robin
+...
