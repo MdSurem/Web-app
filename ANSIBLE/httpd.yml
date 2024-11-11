@@ -1,0 +1,28 @@
+---
+ - hosts: dev
+   connection: ssh
+
+   tasks:
+     - name: installing apach2
+       yum:
+         name: httpd
+         state: present
+
+
+     - name: start the service
+       service:
+         name: httpd
+         state: started
+
+     - name: get the code from github
+       yum:
+         name: git
+         state: present
+
+     - name: get the code from github
+       git:
+         repo: https://github.com/MdSurem/Docker-Repo.git
+         dest: "/var/www/html"
+
+...
+
