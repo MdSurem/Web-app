@@ -1,0 +1,31 @@
+pipeline{
+    agent any
+    stages{
+        stage("code"){
+            steps{
+                git 'https://github.com/devops0014/docker-webapp.git'
+            }
+        }
+        stage("build"){
+            steps{
+                
+                sh "mvn clean package"
+            }
+        }
+        stage("image-build"){
+            steps{
+                sh "cp -r /var/lib/jenkins/workspace/job-1/target Docker-app"
+                
+                sh "docker build -t image-app /var/lib/jenkins/workspace/job-1/Docker-app"
+                
+                sh "docker build -t image-db /var/lib/jenkins/workspace/job-1/Docker-db"
+            }
+        }
+        stage("container"){
+            steps{
+                sh "docker run -d --name devopsdb -p 3306:3306 image-db"
+                sh "docker run -itd --name app-cont -p 7878:8080 --link devopsdb:mysqlconnecton image-app"
+            }
+        }
+    }
+}
