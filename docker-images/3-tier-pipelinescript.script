@@ -29,3 +29,5 @@ pipeline{
         }
     }
 }
+##note :- internally docker and jenkins not commuticate default we need to give permission
+#RUN THIS COMMAND : chmod 777 ///var/run/docker.sock
