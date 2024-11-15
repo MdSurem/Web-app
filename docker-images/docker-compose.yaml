@@ -1,0 +1,23 @@
+---
+
+  version: "3"
+  services:
+    mobile:
+      container_name: amazon
+      build: "./food"
+      ports:
+        - "7777:80"
+
+    bank:
+      container_name: flipcart
+      build: "./instamart"
+      ports:
+        - "8888:80"
+
+
+    net:
+      container_name: microsoft
+      build: "./genie"
+      ports:
+        - "9999:80"
+
