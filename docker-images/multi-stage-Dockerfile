@@ -1,0 +1,15 @@
+
+#nodejs application deployment
+
+FROM node:16-alpine as surem   #alpine--unwanted data will remove
+WORKDIR ./mdsurem
+COPY *package.json ./
+RUN npm install  #node js dependencies installing
+COPY . .
+CMD npm start  #application start
+
+FROM surem as md
+COPY . .
+RUN npm install --production
+CMD npm start
+
