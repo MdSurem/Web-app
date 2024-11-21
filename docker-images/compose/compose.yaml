@@ -1,0 +1,28 @@
+---
+version: "3"
+services: 
+   mobile: 
+      container_name: cont-1
+      image: nginx
+      ports:
+        - "1234:80"
+      volumes:
+        - "/usr/share/nginx/html"
+      networks:
+        - "network-1"
+
+   banking:
+      container_name: cont-2
+      image: httpd
+      ports: 
+        - "4545:80"
+      volumes:
+        - "/usr/local/apache2/htdocs"
+      networks:
+        - "network-2"
+
+  networks:
+     network-1:
+        driver: bidge
+     network-2:
+        driver: bidge
