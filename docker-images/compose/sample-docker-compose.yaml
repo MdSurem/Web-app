@@ -1,0 +1,30 @@
+
+#sample yaml compose file
+---
+version: "3"
+services:
+   database:
+      container_name: devopsdb
+      build: "./Docker-db"
+      ports:
+        - "3306:3306"
+      networks:
+        - "network-1"
+
+   application:
+      container_name: devopsapp
+      build: "./Docker-app"
+      ports:
+        - "1234:8080"
+      depends_on:
+        - database
+      volumes:
+        - "/usr/local/tomcat"
+      networks:
+        - "network-2"
+
+    networks:
+       network-1: 
+          driver: bridge
+       network-2: 
+          driver: bridge
