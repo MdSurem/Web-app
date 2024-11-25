@@ -1,0 +1,91 @@
+pipeline{
+    agent any
+    tools{
+        nodejs 'node16'
+        jdk 'jdk17'
+    }
+    environment{
+        SCAN=tool 'mysonar'
+    }
+    stages{
+        stage("CleanWS"){
+            steps{
+                cleanWs()
+            }
+        }
+        stage("Code"){
+            steps{
+                git 'https://github.com/MdSurem/Zomato-Project.git'
+            }
+        }
+        stage("QCA"){
+            steps{
+                withSonarQubeEnv('mysonar'){
+                      sh '''$SCAN/bin/sonar-scanner \
+                       -Dsonar.projectKey=zomato \
+                       -Dsonar.sources=. \
+                    -Dsonar.host.url=http://34.204.10.120:9000 \
+                   -Dsonar.login=sqp_645d037e2aee41d9cb4037295b58c80c17c8c998'''
+                }
+            }
+        }
+        stage("QualityGates"){
+            steps{
+                script{
+                    waitForQualityGate abortPipeline: false, credentialsId: 'sonar-password'
+                }
+            }
+        }
+        stage("BuildNode"){
+            steps{
+                sh 'npm install'
+            }
+        }
+        stage("Dp-Check"){
+            steps{
+                script{
+                    dependencyCheck additionalArguments: '--scan./--disableYarnAudit--disableNodeAudit', odcInstallation: 'Dp-Check'
+                    dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+                }
+            }
+        }
+        stage("ImageBuild"){
+            steps{
+                sh 'docker build -t image1 .'
+            }
+        }
+        stage("Trivy"){
+            steps{
+                sh 'trivy fs . >trivyfs.txt'
+            }
+        }
+        stage("ScanImage"){
+            steps{
+                sh 'trivy image image1'
+            }
+        }
+        stage("DockerHub"){
+            steps{
+                script{
+                    withDockerRegistry(credentialsId: 'docker-password') {
+                        sh 'docker tag image1 mdsurem/mydeployment:docker-v2'
+                        sh 'docker push mdsurem/mydeployment:docker-v2'
+                    }
+                }
+            }
+        }
+        stage("Conatiner"){
+            steps{
+                sh 'docker run -itd --name cont-1 -p 3000:3000 mdsurem/mydeployment:docker-v2'
+            }
+        }
+    }
+    post{
+        success{
+            echo "build is successfully done by all stages"
+        }
+        failure{
+            echo "build failed some issues in the pipeline"
+        }
+    }
+}
