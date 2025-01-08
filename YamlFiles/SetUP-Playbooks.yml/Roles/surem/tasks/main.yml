@@ -1,0 +1,4 @@
+    - name: creste directory
+      file:
+        path: "devops"
+        state: directory
