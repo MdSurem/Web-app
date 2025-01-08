@@ -1,0 +1,4 @@
+    - name: create files inside of the directory
+      file:
+        path: "devops/tcs.com"
+        state: touch
