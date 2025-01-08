@@ -1,0 +1,8 @@
+---
+- hosts: dev
+  connection: ssh
+
+  roles:
+    - surem
+    - shalem
+    - keerthi
