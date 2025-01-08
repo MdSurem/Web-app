@@ -1,0 +1,14 @@
+---
+- hosts: dev
+  connection: ssh
+  tasks:
+    - name: install git
+      yum:
+        name: git
+        state: present
+    - name: install git
+      command: git -v
+      register: abc
+
+    - debug:
+        msg: "check slave git version:{{abc.stdout}}"
