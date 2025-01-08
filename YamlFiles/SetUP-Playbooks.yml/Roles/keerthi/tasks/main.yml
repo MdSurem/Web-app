@@ -1,0 +1,5 @@
+    - name: add content on the file
+      copy:
+        dest: "devops/tcs.com"
+        content: |
+          "hello there i am ready to learn or join your organeization at any cost"
